@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Gallery.module.css';
 
@@ -13,6 +13,8 @@ class Modal extends Component {
     handleModalHide: PropTypes.func.isRequired,
     handleModalShow: PropTypes.func.isRequired,
   };
+
+  modalOverlay = createRef();
 
   componentDidMount() {
     window.addEventListener('keydown', this.handleCloseEscape);
@@ -35,11 +37,23 @@ class Modal extends Component {
     this.handleClose();
   };
 
+  handleOverlayClick = e => {
+    const { current } = this.modalOverlay;
+
+    if (current && e.target !== current) return;
+
+    this.handleClose();
+  };
+
   render() {
     const { url, tags } = this.props;
-
+    /*eslint-disable*/
     return (
-      <div className={styles.backdrop}>
+      <div
+        className={styles.backdrop}
+        onClick={this.handleOverlayClick}
+        ref={this.modalOverlay}
+      >
         <div className={styles.modal}>
           <img src={url} alt={tags} />
         </div>

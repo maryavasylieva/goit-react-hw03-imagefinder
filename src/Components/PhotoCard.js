@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
+
 import styles from './Gallery.module.css';
 import Modal from './Modal';
 // import mapper from './mapper';
@@ -19,6 +20,8 @@ class PhotoCard extends Component {
     views: PropTypes.number.isRequired,
   };
 
+  modalOverlay = createRef();
+
   state = {
     openModal: false,
   };
@@ -29,14 +32,6 @@ class PhotoCard extends Component {
 
   handleModalHide = () => {
     this.setState({ openModal: false });
-  };
-
-  handleOverlayClick = e => {
-    const { current } = this.modalOverlay;
-
-    if (current && e.target !== current) return;
-
-    this.handleClose();
   };
 
   render() {
@@ -92,6 +87,7 @@ class PhotoCard extends Component {
             tags={tags}
             handleModalHide={this.handleModalHide}
             handleModalShow={this.handleModalShow}
+            onClick={this.handleOverlayClick}
           />
         )}
       </>
